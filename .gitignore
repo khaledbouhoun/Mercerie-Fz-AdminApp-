@@ -1,0 +1,51 @@
+# =======================================
+# ⚙️ Flutter & Dart
+# =======================================
+.dart_tool/
+.packages
+build/
+pubspec.lock
+
+# =======================================
+# 🧱 Build outputs (to avoid huge files)
+# =======================================
+# Ignore generated APKs and AABs
+build/app/outputs/apk/
+build/app/outputs/bundle/
+android/app/build/
+ios/Flutter/
+ios/Pods/
+macos/Flutter/ephemeral/
+windows/runner/Debug/
+windows/runner/Release/
+linux/flutter/ephemeral/
+web/build/
+
+# =======================================
+# 🧩 Firebase / Environment configs
+# =======================================
+google-services.json
+GoogleService-Info.plist
+firebase.json
+.env
+
+# =======================================
+# 💻 IDE & System files
+# =======================================
+.vscode/
+.idea/
+*.iml
+*.log
+*.DS_Store
+
+# =======================================
+# ⚠️ Binary & Temporary Files
+# =======================================
+*.lock
+*.so
+*.dll
+*.exe
+*.zip
+*.tar
+*.tmp
+*.bak
