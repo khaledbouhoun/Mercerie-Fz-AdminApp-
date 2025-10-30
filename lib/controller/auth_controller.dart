@@ -2,6 +2,7 @@
 import 'package:admin_ecommerce_app/core/class/crud.dart';
 import 'package:admin_ecommerce_app/core/constant/routesstr.dart';
 import 'package:admin_ecommerce_app/data/model/employe_model.dart';
+import 'package:admin_ecommerce_app/data/model/stores_model.dart';
 import 'package:admin_ecommerce_app/linkapi.dart';
 import 'package:admin_ecommerce_app/view/employe/employe_add.dart';
 import 'package:admin_ecommerce_app/widget/dialog.dart';
@@ -19,10 +20,12 @@ class AuthController extends GetxController {
   TextEditingController passwordController = TextEditingController();
   RxBool isLoading = false.obs;
   RxBool hidePassword = true.obs;
+  RxList<StoresModel> stores = <StoresModel>[].obs;
 
   @override
   void onInit() async {
     await getEmployees();
+    await fetchStores();
     super.onInit();
   }
 
@@ -78,5 +81,21 @@ class AuthController extends GetxController {
       return;
     }
     isLoading.value = false;
+  }
+
+  Future<void> fetchStores() async {
+    try {
+      var response = await crud.get(AppLink.stores);
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.body as List;
+        stores.value = data.map((json) => StoresModel.fromJson(json)).toList();
+        print('✅ Stores fetched: ${stores.length}');
+      } else {
+        stores.clear();
+      }
+    } catch (e) {
+      print('❌ Error fetching stores: $e');
+      stores.clear();
+    }
   }
 }

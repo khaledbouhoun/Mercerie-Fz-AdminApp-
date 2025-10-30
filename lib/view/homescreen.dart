@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:admin_ecommerce_app/controller/auth_controller.dart';
 import 'package:admin_ecommerce_app/controller/category/category_controller.dart'; // Import the controller
+import 'package:admin_ecommerce_app/controller/chekintime/chekInTime_controller.dart';
 import 'package:admin_ecommerce_app/controller/employe/employe_controller.dart';
 import 'package:admin_ecommerce_app/controller/item/item_controller.dart';
 import 'package:admin_ecommerce_app/core/constant/color.dart';
@@ -131,6 +132,22 @@ class _HomeScreenState extends State<HomeScreen> {
                           Get.find<ItemController>().getCategories();
                         }
                         break;
+                      case 3:
+                        if (Get.isRegistered<ChekintimeController>()) {
+                          Get.find<ChekintimeController>().fetchCheckInTime();
+                        }
+                        break;
+
+                      default:
+                    }
+                  } else if (controller.selectedEmployee!.employeeType == 3) {
+                    switch (index) {
+                      case 1:
+                        if (Get.isRegistered<ChekintimeController>()) {
+                          Get.find<ChekintimeController>().fetchsFunction();
+                        }
+                        break;
+
                       default:
                     }
                   }
@@ -187,17 +204,23 @@ class HomeScreenController extends GetxController {
           SvgPicture.asset(selectedIndex.value == 2 ? AppSvg.truckSvgrepoCom : AppSvg.truckTickSvgrepoCom2, color: AppColor.primaryColor),
           SvgPicture.asset(selectedIndex.value == 5 ? AppSvg.clockSvgrepoCom : AppSvg.clockSvgrepoCom, color: AppColor.primaryColor),
         ]);
+      } else if (selectedEmployee!.employeeType == 3) {
+        pages.addAll([const Order(), const ChekInTime()]);
+        ledingPages.addAll([
+          SvgPicture.asset(selectedIndex.value == 0 ? AppSvg.truckSvgrepoCom : AppSvg.truckTickSvgrepoCom2, color: AppColor.primaryColor),
+          SvgPicture.asset(selectedIndex.value == 5 ? AppSvg.clockSvgrepoCom : AppSvg.clockSvgrepoCom, color: AppColor.primaryColor),
+        ]);
       }
     }
 
     // Ensure we have at least one page
-    if (pages.isEmpty) {
-      pages.addAll([const Order(), const ChekInTime()]);
-      ledingPages.addAll([
-        SvgPicture.asset(selectedIndex.value == 0 ? AppSvg.truckSvgrepoCom : AppSvg.truckTickSvgrepoCom2, color: AppColor.primaryColor),
-        SvgPicture.asset(selectedIndex.value == 5 ? AppSvg.clockSvgrepoCom : AppSvg.clockSvgrepoCom, color: AppColor.primaryColor),
-      ]);
-    }
+    // if (pages.isEmpty) {
+    //   pages.addAll([const Order(), const ChekInTime()]);
+    //   ledingPages.addAll([
+    //     SvgPicture.asset(selectedIndex.value == 0 ? AppSvg.truckSvgrepoCom : AppSvg.truckTickSvgrepoCom2, color: AppColor.primaryColor),
+    //     SvgPicture.asset(selectedIndex.value == 5 ? AppSvg.clockSvgrepoCom : AppSvg.clockSvgrepoCom, color: AppColor.primaryColor),
+    //   ]);
+    // }
   }
 
   Future<bool> onpop() async {

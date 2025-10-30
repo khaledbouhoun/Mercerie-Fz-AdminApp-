@@ -13,113 +13,116 @@ class Categorywidget extends StatelessWidget {
   final VoidCallback? ondelete;
   const Categorywidget({super.key, required this.categoriesModel, this.onedit, this.ondelete});
 
+  Widget _buildActionButton({required VoidCallback? onTap, required String icon, required String label, required Color color}) {
+    return Expanded(
+      child: Material(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(12),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
+            height: 40,
+            alignment: Alignment.center,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset(icon, color: color, width: 18, height: 18),
+                const SizedBox(width: 6),
+                Text(label, style: TextStyle(color: color, fontSize: 14, fontWeight: FontWeight.w600)),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPlaceholder() {
+    return Container(
+      color: AppColor.background.withOpacity(0.1),
+      padding: const EdgeInsets.all(25),
+      child: SvgPicture.asset(AppSvg.galleryRemoveSvgrepoCom, color: AppColor.primaryColor.withOpacity(0.5)),
+    );
+  }
+
+  Widget _buildLoadingPlaceholder() {
+    return Container(color: AppColor.background.withOpacity(0.1), child: const Center(child: CircularProgressIndicator(strokeWidth: 2)));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       width: Get.width,
       height: 180,
-      margin: const EdgeInsets.all(10),
-      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: AppColor.primaryColor),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColor.primaryColor.withOpacity(0.2), width: 1.5),
       ),
-      child: Row(
-        children: [
-          // Left side - Content
-          Expanded(
-            flex: 1,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  categoriesModel.categoriesName!,
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-
-                Container(
-                  height: 40,
-                  width: 100,
-                  decoration: BoxDecoration(color: Colors.blue, borderRadius: BorderRadius.circular(12)),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: onedit,
-                      borderRadius: BorderRadius.circular(12),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset(AppSvg.edit3SvgrepoCom, color: AppColor.white, width: 20, height: 20),
-                          SizedBox(width: 8),
-                          Text('edit', style: TextStyle(color: AppColor.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-
-                Container(
-                  height: 40,
-                  width: 100,
-                  decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(12)),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: ondelete,
-                      borderRadius: BorderRadius.circular(12),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset(AppSvg.trashBinTrashSvgrepoCom, color: AppColor.white, width: 20, height: 20),
-                          SizedBox(width: 8),
-                          Text('Delete', style: TextStyle(color: AppColor.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          const SizedBox(width: 10),
-
-          // Right side - Image
-          Expanded(
-            flex: 1,
-            child: Container(
-              height: 150,
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-                color: AppColor.background,
-              ),
-              child: ClipRRect(
-                borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(18),
+        child: Row(
+          children: [
+            // Left side - Image
+            Expanded(
+              flex: 2,
+              child: Container(
+                decoration: BoxDecoration(color: AppColor.background.withOpacity(0.1)),
                 child:
                     categoriesModel.categoriesImage != null && categoriesModel.categoriesImage!.isNotEmpty
-                        ? CachedNetworkImage(
-                          imageUrl: AppLink.categoryImagesPath + categoriesModel.categoriesImage!,
-                          fit: BoxFit.scaleDown,
-                          errorWidget:
-                              (context, url, error) => Padding(
-                                padding: const EdgeInsets.all(15),
-                                child: SvgPicture.asset(AppSvg.galleryRemoveSvgrepoCom, color: AppColor.primaryColor),
-                              ),
-                          placeholder: (context, url) => const Center(child: SizedBox()),
+                        ? Hero(
+                          tag: 'category_${categoriesModel.categoriesId}',
+                          child: CachedNetworkImage(
+                            imageUrl: AppLink.categoryImagesPath + categoriesModel.categoriesImage!,
+                            fit: BoxFit.cover,
+                            height: double.infinity,
+                            errorWidget: (context, url, error) => _buildPlaceholder(),
+                            placeholder: (context, url) => _buildLoadingPlaceholder(),
+                          ),
                         )
-                        : Container(
-                          color: AppColor.background,
-                          padding: const EdgeInsets.all(25),
-                          child: SvgPicture.asset(AppSvg.galleryRemoveSvgrepoCom, color: AppColor.primaryColor),
-                        ),
+                        : _buildPlaceholder(),
               ),
             ),
-          ),
-        ],
+
+            // Right side - Content
+            Expanded(
+              flex: 3,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Category Name
+                    Text(
+                      categoriesModel.categoriesName!,
+                      style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, letterSpacing: 0.5),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+
+                    const Spacer(),
+
+                    // Action Buttons
+                    Row(
+                      children: [
+                        _buildActionButton(onTap: onedit, icon: AppSvg.edit3SvgrepoCom, label: 'Edit', color: AppColor.primaryColor),
+                        const SizedBox(width: 8),
+                        _buildActionButton(
+                          onTap: ondelete,
+                          icon: AppSvg.trashBinTrashSvgrepoCom,
+                          label: 'Delete',
+                          color: Colors.red.shade400,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

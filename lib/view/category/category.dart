@@ -20,12 +20,56 @@ class Category extends StatelessWidget {
         builder: (context) {
           return RefreshIndicator(
             onRefresh: () async => controller.getCategories(),
-            child: SafeArea(
-              child: SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.all(16.0),
-                child: _buildCategoriesSection(controller),
-              ),
+            color: AppColor.primaryColor,
+            backgroundColor: Colors.white,
+            child: CustomScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              slivers: [
+                /// Modern App Bar
+                SliverAppBar(
+                  expandedHeight: 120,
+                  floating: false,
+                  pinned: true,
+                  elevation: 0,
+                  backgroundColor: Colors.transparent,
+                  flexibleSpace: FlexibleSpaceBar(
+                    centerTitle: false,
+                    titlePadding: const EdgeInsets.only(left: 24, bottom: 16),
+                    title: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(color: Colors.white.withOpacity(0.95), borderRadius: BorderRadius.circular(16)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Categories',
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF2D3142), letterSpacing: 0.3),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [AppColor.primaryColor.withOpacity(0.12), AppColor.primaryColor.withOpacity(0.06)],
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: AppColor.primaryColor.withOpacity(0.2), width: 1.5),
+                            ),
+                            child: Text(
+                              '${controller.categoreis.length}',
+                              style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColor.primaryColor, letterSpacing: 0.5),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+                /// Content
+                SliverToBoxAdapter(
+                  child: Padding(padding: const EdgeInsets.symmetric(vertical: 5), child: _buildCategoriesSection(controller)),
+                ),
+              ],
             ),
           );
         },
@@ -35,89 +79,10 @@ class Category extends StatelessWidget {
           Get.toNamed(AppRoute.categoryadd);
         },
         backgroundColor: AppColor.primaryColor,
-        icon: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SvgPicture.asset(AppSvg.addFolderSvgrepoCom, color: Colors.white, width: 24, height: 24),
-        ),
+        icon: Padding(padding: const EdgeInsets.only(right: 8.0), child: SvgPicture.asset(AppSvg.widgetAddSvgrepoCom, color: Colors.white)),
         label: const Text("Add Category", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      ),
-    );
-  }
-
-  Widget _buildHeaderSection(CategoryController controller) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.1), spreadRadius: 1, blurRadius: 10, offset: const Offset(0, 4))],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('Categories Management', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black87)),
-                  const SizedBox(height: 8),
-                  Text(
-                    '${controller.categoreis.length} categories available',
-                    style: TextStyle(fontSize: 16, color: Colors.grey.shade600, fontWeight: FontWeight.w500),
-                  ),
-                ],
-              ),
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(color: AppColor.primaryColor.withOpacity(0.1), borderRadius: BorderRadius.circular(12)),
-                child: Icon(Icons.category, color: AppColor.primaryColor, size: 24),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(child: _buildStatCard('Total Categories', controller.categoreis.length.toString(), Icons.category, Colors.purple)),
-              const SizedBox(width: 16),
-              Expanded(
-                child: _buildStatCard('Active Categories', controller.categoreis.length.toString(), Icons.check_circle, Colors.green),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStatCard(String title, String value, IconData icon, Color color) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.3)),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(8)),
-            child: Icon(icon, color: Colors.white, size: 20),
-          ),
-          const SizedBox(width: 12),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(value, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: color)),
-              Text(title, style: TextStyle(fontSize: 12, color: Colors.grey.shade600, fontWeight: FontWeight.w500)),
-            ],
-          ),
-        ],
       ),
     );
   }
@@ -126,42 +91,35 @@ class Category extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text('All Categories', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87)),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(color: AppColor.primaryColor.withOpacity(0.1), borderRadius: BorderRadius.circular(20)),
-              child: Text(
-                '${controller.categoreis.length} categories',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColor.primaryColor),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 20),
 
         if (controller.categoreis.isEmpty)
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(40),
+            padding: const EdgeInsets.all(48),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.1), spreadRadius: 1, blurRadius: 10, offset: const Offset(0, 4))],
+              borderRadius: BorderRadius.circular(24),
+              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), spreadRadius: 0, blurRadius: 20, offset: const Offset(0, 8))],
             ),
             child: Column(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(color: Colors.grey.shade100, borderRadius: BorderRadius.circular(50)),
-                  child: Icon(Icons.category_outlined, size: 60, color: Colors.grey.shade400),
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(colors: [Colors.grey.shade100, Colors.grey.shade50]),
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  child: Icon(Icons.category_outlined, size: 64, color: Colors.grey.shade400),
                 ),
-                const SizedBox(height: 16),
-                const Text('No Categories Found', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
-                const SizedBox(height: 8),
-                Text('Add your first category to get started', style: TextStyle(fontSize: 14, color: Colors.grey.shade600)),
+                const SizedBox(height: 24),
+                const Text('No Categories Yet', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF2D3142))),
+                const SizedBox(height: 12),
+                Text(
+                  'Start by adding your first category\nto organize your products',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 15, color: Colors.grey.shade600, height: 1.5),
+                ),
               ],
             ),
           )
@@ -179,59 +137,128 @@ class Category extends StatelessWidget {
                   Get.toNamed(AppRoute.categoryupdate, arguments: {"categoriesModel": controller.categoreis[index]});
                 },
                 ondelete: () {
-                  Get.defaultDialog(
-                    title: 'Delete Category',
-                    titleStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
-                    titlePadding: const EdgeInsets.only(top: 24),
-                    contentPadding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
-                    radius: 16,
-                    content: Column(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(color: Colors.red.shade50, borderRadius: BorderRadius.circular(12)),
-                          child: Icon(Icons.delete_forever, color: Colors.red.shade600, size: 32),
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          'Are you sure you want to delete this category? This action cannot be undone.',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
-                        ),
-                      ],
-                    ),
-                    confirm: ElevatedButton(
-                      onPressed: () async {
-                        Get.back();
-                        await controller.deleteCategories(controller.categoreis[index]);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red.shade600,
-                        foregroundColor: Colors.white,
-                        elevation: 0,
-                        minimumSize: const Size(120, 45),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                      ),
-                      child: const Text('Delete'),
-                    ),
-                    cancel: ElevatedButton(
-                      onPressed: () => Get.back(),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.grey.shade100,
-                        foregroundColor: Colors.black87,
-                        elevation: 0,
-                        minimumSize: const Size(120, 45),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                      ),
-                      child: const Text('Cancel'),
-                    ),
-                  );
+                  _showModernDeleteDialog(context, controller, index);
                 },
                 categoriesModel: controller.categoreis[index],
               );
             },
           ),
       ],
+    );
+  }
+
+  void _showModernDeleteDialog(BuildContext context, CategoryController controller, int index) {
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: '',
+      barrierColor: Colors.black.withOpacity(0.65),
+      transitionDuration: const Duration(milliseconds: 400),
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        return ScaleTransition(
+          scale: CurvedAnimation(parent: animation, curve: Curves.easeOutBack),
+          child: FadeTransition(opacity: animation, child: child),
+        );
+      },
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return Center(
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 24),
+            constraints: const BoxConstraints(maxWidth: 400),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(32),
+              boxShadow: [BoxShadow(color: Colors.red.withOpacity(0.15), blurRadius: 40, offset: const Offset(0, 20))],
+            ),
+            child: Material(
+              color: Colors.transparent,
+              child: Padding(
+                padding: const EdgeInsets.all(32),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    /// Icon
+                    Container(
+                      width: 80,
+                      height: 80,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(colors: [Color(0xFFEF4444), Color(0xFFDC2626)]),
+                        shape: BoxShape.circle,
+                        boxShadow: [BoxShadow(color: const Color(0xFFEF4444).withOpacity(0.4), blurRadius: 20, offset: const Offset(0, 8))],
+                      ),
+                      child: const Icon(Icons.delete_rounded, color: Colors.white, size: 40),
+                    ),
+                    const SizedBox(height: 24),
+
+                    /// Title
+                    const Text('Delete Category', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFF2D3142))),
+                    const SizedBox(height: 12),
+
+                    /// Message
+                    Text(
+                      'Are you sure you want to delete this category? This action cannot be undone.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 15, color: Colors.grey.shade600, height: 1.5),
+                    ),
+                    const SizedBox(height: 32),
+
+                    /// Buttons
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            height: 52,
+                            decoration: BoxDecoration(color: Colors.grey.shade100, borderRadius: BorderRadius.circular(16)),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(16),
+                                onTap: () => Get.back(),
+                                child: const Center(
+                                  child: Text(
+                                    'Cancel',
+                                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Color(0xFF2D3142)),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Container(
+                            height: 52,
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(colors: [Color(0xFFEF4444), Color(0xFFDC2626)]),
+                              borderRadius: BorderRadius.circular(16),
+                              boxShadow: [
+                                BoxShadow(color: const Color(0xFFEF4444).withOpacity(0.4), blurRadius: 12, offset: const Offset(0, 6)),
+                              ],
+                            ),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(16),
+                                onTap: () async {
+                                  Get.back();
+                                  await controller.deleteCategories(controller.categoreis[index]);
+                                },
+                                child: const Center(
+                                  child: Text('Delete', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

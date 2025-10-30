@@ -38,6 +38,9 @@ class AppLink {
   static const String yallidineKeepAlive = "$adminapp/yallidine/keepalive";
   static const String yallidineConfirm = "$adminapp/yallidine/confirm";
 
+  // chektime
+  static const String chektime = "$adminapp/chektime";
+  static const String stores = "$adminapp/chektime/stores";
 
   //========================== Auth ============================
 

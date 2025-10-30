@@ -26,223 +26,263 @@ class Item extends StatelessWidget {
             },
             child: SafeArea(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 child: Column(
                   children: [
+                    // Modern header
                     Container(
-                      padding: const EdgeInsets.all(10),
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 22),
+                      margin: const EdgeInsets.only(bottom: 18),
                       decoration: BoxDecoration(
-                        color: AppColor.white,
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(color: Colors.grey.withOpacity(0.1), spreadRadius: 1, blurRadius: 10, offset: const Offset(0, 4)),
-                        ],
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.08), blurRadius: 12, offset: const Offset(0, 4))],
                       ),
-                      child: Row(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
-                            child: Container(
-                              height: 50,
-                              decoration: BoxDecoration(
-                                color: AppColor.background,
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(color: AppColor.grey.withOpacity(0.3)),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text('Products', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black)),
+                                  const SizedBox(height: 6),
+                                  Text('${controller.items.length} items', style: TextStyle(fontSize: 13, color: Colors.grey.shade600)),
+                                ],
                               ),
-                              child: TextField(
-                                decoration: InputDecoration(
-                                  hintText: 'Search products...',
-                                  hintStyle: TextStyle(color: AppColor.grey),
-                                  prefixIcon: Icon(Icons.search, color: AppColor.grey),
-                                  border: InputBorder.none,
-                                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                              Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: AppColor.primaryColor.withOpacity(0.12),
+                                  borderRadius: BorderRadius.circular(12),
                                 ),
-                                onChanged: (value) {
-                                  controller.searchItems(value);
-                                },
+                                child: Icon(Icons.inventory_2, color: AppColor.primaryColor, size: 24),
                               ),
-                            ),
+                            ],
                           ),
-                          const SizedBox(width: 12),
-                          Container(
-                            height: 50,
-                            width: 50,
-                            decoration: BoxDecoration(color: AppColor.primaryColor, borderRadius: BorderRadius.circular(12)),
-                            child: IconButton(
-                              icon: const Icon(Icons.filter_list, color: AppColor.white),
-                              onPressed: () {
-                                Get.bottomSheet(
-                                  GetBuilder<ItemController>(
-                                    init: ItemController(),
-                                    builder: (context) {
-                                      return Container(
-                                        height: Get.height * 0.6,
-                                        padding: const EdgeInsets.all(10),
-                                        decoration: const BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                                        ),
-                                        child: SingleChildScrollView(
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          const SizedBox(height: 18),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  height: 48,
+                                  decoration: BoxDecoration(
+                                    color: AppColor.background,
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(color: AppColor.grey.withOpacity(0.2)),
+                                  ),
+                                  child: TextField(
+                                    decoration: InputDecoration(
+                                      hintText: 'Search products...',
+                                      hintStyle: TextStyle(color: AppColor.grey),
+                                      prefixIcon: Icon(Icons.search, color: AppColor.grey),
+                                      border: InputBorder.none,
+                                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                                    ),
+                                    onChanged: (value) {
+                                      controller.searchItems(value);
+                                    },
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Container(
+                                height: 48,
+                                width: 48,
+                                decoration: BoxDecoration(color: AppColor.primaryColor, borderRadius: BorderRadius.circular(12)),
+                                child: IconButton(
+                                  icon: const Icon(Icons.filter_list, color: AppColor.white),
+                                  onPressed: () {
+                                    // ...existing code for filter bottom sheet...
+                                    Get.bottomSheet(
+                                      GetBuilder<ItemController>(
+                                        init: ItemController(),
+                                        builder: (context) {
+                                          return Container(
+                                            height: Get.height * 0.6,
+                                            padding: const EdgeInsets.all(10),
+                                            decoration: const BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                                            ),
+                                            child: SingleChildScrollView(
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
-                                                  const Text(
-                                                    'Filter Products',
-                                                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                                  // ...existing code for filter chips, price, status, reset...
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      const Text(
+                                                        'Filter Products',
+                                                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                                      ),
+                                                      IconButton(
+                                                        onPressed: () => Get.back(),
+                                                        icon: const Icon(Icons.close),
+                                                        style: IconButton.styleFrom(
+                                                          backgroundColor: Colors.grey.shade100,
+                                                          padding: const EdgeInsets.all(8),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                  IconButton(
-                                                    onPressed: () => Get.back(),
-                                                    icon: const Icon(Icons.close),
-                                                    style: IconButton.styleFrom(
-                                                      backgroundColor: Colors.grey.shade100,
-                                                      padding: const EdgeInsets.all(8),
+                                                  const SizedBox(height: 20),
+                                                  Text(
+                                                    'Categories',
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w600,
+                                                      color: Colors.grey.shade800,
                                                     ),
                                                   ),
-                                                ],
-                                              ),
-                                              const SizedBox(height: 20),
-                                              Text(
-                                                'Categories',
-                                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.grey.shade800),
-                                              ),
-                                              const SizedBox(height: 10),
-                                              Wrap(
-                                                spacing: 8,
-                                                runSpacing: 8,
-                                                children:
-                                                    controller.categoreis.map((category) {
-                                                      final isSelected = controller.selectedCategory == category.categoriesId;
-                                                      return FilterChip(
-                                                        label: Text(category.categoriesName!),
-                                                        selected: isSelected,
+                                                  const SizedBox(height: 10),
+                                                  Wrap(
+                                                    spacing: 8,
+                                                    runSpacing: 8,
+                                                    children:
+                                                        controller.categoreis.map((category) {
+                                                          final isSelected = controller.selectedCategory == category.categoriesId;
+                                                          return FilterChip(
+                                                            label: Text(category.categoriesName!),
+                                                            selected: isSelected,
+                                                            onSelected: (selected) {
+                                                              controller.filterByCategory(selected ? category.categoriesId : null);
+                                                              controller.applyFilters();
+                                                            },
+                                                            backgroundColor: Colors.grey.shade100,
+                                                            selectedColor: AppColor.primaryColor.withOpacity(0.2),
+                                                            checkmarkColor: AppColor.primaryColor,
+                                                            labelStyle: TextStyle(
+                                                              color: isSelected ? AppColor.primaryColor : Colors.grey.shade800,
+                                                            ),
+                                                          );
+                                                        }).toList(),
+                                                  ),
+                                                  const SizedBox(height: 20),
+                                                  Text(
+                                                    'Price Range',
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w600,
+                                                      color: Colors.grey.shade800,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 10),
+                                                  Row(
+                                                    children: [
+                                                      Expanded(
+                                                        child: TextField(
+                                                          controller: controller.minPriceController,
+                                                          decoration: InputDecoration(
+                                                            hintText: 'Min',
+                                                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                                                          ),
+                                                          keyboardType: TextInputType.number,
+                                                          onChanged: (value) {
+                                                            controller.applyFilters();
+                                                          },
+                                                        ),
+                                                      ),
+                                                      const SizedBox(width: 16),
+                                                      Expanded(
+                                                        child: TextField(
+                                                          controller: controller.maxPriceController,
+                                                          decoration: InputDecoration(
+                                                            hintText: 'Max',
+                                                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                                                          ),
+                                                          keyboardType: TextInputType.number,
+                                                          onChanged: (value) {
+                                                            controller.applyFilters();
+                                                          },
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(height: 20),
+                                                  Text(
+                                                    'Status',
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w600,
+                                                      color: Colors.grey.shade800,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 10),
+                                                  Row(
+                                                    children: [
+                                                      FilterChip(
+                                                        label: const Text('Active'),
+                                                        selected: controller.showActiveOnly,
                                                         onSelected: (selected) {
-                                                          controller.filterByCategory(selected ? category.categoriesId : null);
-                                                          // Instantly apply filter
+                                                          controller.filterByStatus(selected, false);
                                                           controller.applyFilters();
                                                         },
                                                         backgroundColor: Colors.grey.shade100,
-                                                        selectedColor: AppColor.primaryColor.withOpacity(0.2),
-                                                        checkmarkColor: AppColor.primaryColor,
-                                                        labelStyle: TextStyle(
-                                                          color: isSelected ? AppColor.primaryColor : Colors.grey.shade800,
-                                                        ),
-                                                      );
-                                                    }).toList(),
-                                              ),
-                                              const SizedBox(height: 20),
-                                              Text(
-                                                'Price Range',
-                                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.grey.shade800),
-                                              ),
-                                              const SizedBox(height: 10),
-                                              Row(
-                                                children: [
-                                                  Expanded(
-                                                    child: TextField(
-                                                      controller: controller.minPriceController,
-                                                      decoration: InputDecoration(
-                                                        hintText: 'Min',
-                                                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                                                        selectedColor: Colors.green.shade100,
+                                                        checkmarkColor: Colors.green,
                                                       ),
-                                                      keyboardType: TextInputType.number,
-                                                      onChanged: (value) {
-                                                        controller.applyFilters();
-                                                      },
-                                                    ),
-                                                  ),
-                                                  const SizedBox(width: 16),
-                                                  Expanded(
-                                                    child: TextField(
-                                                      controller: controller.maxPriceController,
-                                                      decoration: InputDecoration(
-                                                        hintText: 'Max',
-                                                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                                                      ),
-                                                      keyboardType: TextInputType.number,
-                                                      onChanged: (value) {
-                                                        controller.applyFilters();
-                                                      },
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              const SizedBox(height: 20),
-                                              Text(
-                                                'Status',
-                                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.grey.shade800),
-                                              ),
-                                              const SizedBox(height: 10),
-                                              Row(
-                                                children: [
-                                                  FilterChip(
-                                                    label: const Text('Active'),
-                                                    selected: controller.showActiveOnly,
-                                                    onSelected: (selected) {
-                                                      controller.filterByStatus(selected, false);
-                                                      controller.applyFilters();
-                                                    },
-                                                    backgroundColor: Colors.grey.shade100,
-                                                    selectedColor: Colors.green.shade100,
-                                                    checkmarkColor: Colors.green,
-                                                  ),
-                                                  const SizedBox(width: 8),
-                                                  FilterChip(
-                                                    label: const Text('Inactive'),
-                                                    selected: controller.showInactiveOnly,
-                                                    onSelected: (selected) {
-                                                      controller.filterByStatus(false, selected);
-                                                      controller.applyFilters();
-                                                    },
-                                                    backgroundColor: Colors.grey.shade100,
-                                                    selectedColor: Colors.red.shade100,
-                                                    checkmarkColor: Colors.red,
-                                                  ),
-                                                ],
-                                              ),
-                                              const SizedBox(height: 20),
-                                              Row(
-                                                children: [
-                                                  Expanded(
-                                                    child: ElevatedButton(
-                                                      onPressed: () {
-                                                        controller.resetFilters();
-                                                        Get.back();
-                                                      },
-                                                      style: ElevatedButton.styleFrom(
+                                                      const SizedBox(width: 8),
+                                                      FilterChip(
+                                                        label: const Text('Inactive'),
+                                                        selected: controller.showInactiveOnly,
+                                                        onSelected: (selected) {
+                                                          controller.filterByStatus(false, selected);
+                                                          controller.applyFilters();
+                                                        },
                                                         backgroundColor: Colors.grey.shade100,
-                                                        foregroundColor: Colors.black87,
-                                                        padding: const EdgeInsets.symmetric(vertical: 16),
-                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                                        selectedColor: Colors.red.shade100,
+                                                        checkmarkColor: Colors.red,
                                                       ),
-                                                      child: const Text('Reset'),
-                                                    ),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(height: 20),
+                                                  Row(
+                                                    children: [
+                                                      Expanded(
+                                                        child: ElevatedButton(
+                                                          onPressed: () {
+                                                            controller.resetFilters();
+                                                            Get.back();
+                                                          },
+                                                          style: ElevatedButton.styleFrom(
+                                                            backgroundColor: Colors.grey.shade100,
+                                                            foregroundColor: Colors.black87,
+                                                            padding: const EdgeInsets.symmetric(vertical: 16),
+                                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                                          ),
+                                                          child: const Text('Reset'),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ],
                                               ),
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-
-                                  isScrollControlled: true,
-                                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-                                  backgroundColor: Colors.transparent,
-                                  elevation: 0,
-                                  barrierColor: Colors.black54,
-                                  enableDrag: true,
-                                );
-                              },
-                            ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                      isScrollControlled: true,
+                                      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+                                      backgroundColor: Colors.transparent,
+                                      elevation: 0,
+                                      barrierColor: Colors.black54,
+                                      enableDrag: true,
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 30),
+                    // Products section
                     _buildProductsSection(controller),
                   ],
                 ),
