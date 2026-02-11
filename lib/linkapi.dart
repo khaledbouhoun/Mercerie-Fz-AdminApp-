@@ -1,6 +1,5 @@
 class AppLink {
-  static const String apiId = '53326436197780528328';
-  static const String apiToken = 'Fn502KSLqm3xEduj4wtONMD81Be2sbvejDRP9u0ipMysZ1wAT8GffzkTWkPv6nrx';
+  
 
   // static const server = "http://10.113.254.220:8000/api";
   static const server = "https://merceriefz.com/mercerie_api";
